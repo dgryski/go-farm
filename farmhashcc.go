@@ -4,19 +4,6 @@ package farm
 // and a 128-bit hash equivalent to CityHash128 (v1.1.1).  It also provides
 // a seeded 32-bit hash function similar to CityHash32.
 
-func hash32Len13to24(s []byte) uint32 {
-	slen := len(s)
-	a := fetch32(s, -4+(slen>>1))
-	b := fetch32(s, 4)
-	c := fetch32(s, slen-8)
-	d := fetch32(s, (slen >> 1))
-	e := fetch32(s, 0)
-	f := fetch32(s, slen-4)
-	h := uint32(slen)
-
-	return fmix(mur(f, mur(e, mur(d, mur(c, mur(b, mur(a, h)))))))
-}
-
 func hash32Len13to24Seed(s []byte, seed uint32) uint32 {
 	slen := len(s)
 	a := fetch32(s, -4+(slen>>1))
