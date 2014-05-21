@@ -19,12 +19,12 @@ func fmix(h uint32) uint32 {
 	return h
 }
 
-func Mur(a, h uint32) uint32 {
+func mur(a, h uint32) uint32 {
 	// Helper from Murmur3 for combining two 32-bit values.
 	a *= c1
-	a = Rotate32(a, 17)
+	a = rotate32(a, 17)
 	a *= c2
 	h ^= a
-	h = Rotate32(h, 19)
+	h = rotate32(h, 19)
 	return h*5 + 0xe6546b64
 }
