@@ -1,0 +1,184 @@
+package farm
+
+// This file provides a 32-bit hash equivalent to CityHash32 (v1.1.1)
+// and a 128-bit hash equivalent to CityHash128 (v1.1.1).  It also provides
+// a seeded 32-bit hash function similar to CityHash32.
+
+func Hash32Len13to24(s []byte) uint32 {
+	slen := len(s)
+	a := Fetch32(s, -4+(slen>>1))
+	b := Fetch32(s, 4)
+	c := Fetch32(s, slen-8)
+	d := Fetch32(s, (slen >> 1))
+	e := Fetch32(s, 0)
+	f := Fetch32(s, slen-4)
+	h := uint32(slen)
+
+	return fmix(Mur(f, Mur(e, Mur(d, Mur(c, Mur(b, Mur(a, h)))))))
+}
+
+func Hash32Len13to24Seed(s []byte, seed uint32) uint32 {
+	slen := len(s)
+	a := Fetch32(s, -4+(slen>>1))
+	b := Fetch32(s, 4)
+	c := Fetch32(s, slen-8)
+	d := Fetch32(s, (slen >> 1))
+	e := Fetch32(s, 0)
+	f := Fetch32(s, slen-4)
+	h := d*c1 + uint32(slen) + seed
+	a = Rotate32(a, 12) + f
+	h = Mur(c, h) + a
+	a = Rotate32(a, 3) + c
+	h = Mur(e, h) + a
+	a = Rotate32(a+f, 12) + d
+	h = Mur(b^seed, h) + a
+	return fmix(h)
+}
+
+func Hash32Len0to4(s []byte, seed uint32) uint32 {
+	slen := len(s)
+	b := seed
+	c := uint32(9)
+	for i := 0; i < slen; i++ {
+		v := int8(s[i])
+		b = uint32(b*c1) + uint32(v)
+		c ^= b
+	}
+	return fmix(Mur(b, Mur(uint32(slen), c)))
+}
+
+func Hash128to64(x uint128) uint64 {
+	// Murmur-inspired hashing.
+	const kMul uint64 = 0x9ddfea08eb382d69
+	a := (x.lo ^ x.hi) * kMul
+	a ^= (a >> 47)
+	b := (x.hi ^ a) * kMul
+	b ^= (b >> 47)
+	b *= kMul
+	return b
+}
+
+type uint128 struct {
+	hi uint64
+	lo uint64
+}
+
+// A subroutine for CityHash128().  Returns a decent 128-bit hash for strings
+// of any length representable in signed long.  Based on City and Murmur.
+func CityMurmur(s []byte, seed uint128) uint128 {
+	slen := uint32(len(s))
+	a := seed.lo
+	b := seed.hi
+	c := uint64(0)
+	d := uint64(0)
+	l := slen - 16
+	if l <= 0 { // len <= 16
+		a = ShiftMix(a*k1) * k1
+		c = b*k1 + HashLen0to16(s)
+		if slen >= 8 {
+			d = ShiftMix(a + Fetch64(s, 0))
+		} else {
+			d = ShiftMix(a + c)
+		}
+	} else { // len > 16
+		c = HashLen16(Fetch64(s, int(slen-8))+k1, a)
+		d = HashLen16(b+uint64(slen), c+Fetch64(s, int(slen-16)))
+		a += d
+		for {
+			a ^= ShiftMix(Fetch64(s, 0)*k1) * k1
+			a *= k1
+			b ^= a
+			c ^= ShiftMix(Fetch64(s, 8)*k1) * k1
+			c *= k1
+			d ^= c
+			s = s[16:]
+			l -= 16
+			if l <= 0 {
+				break
+			}
+		}
+	}
+	a = HashLen16(a, c)
+	b = HashLen16(d, b)
+	return uint128{a ^ b, HashLen16(b, a)}
+}
+
+func CityHash128WithSeed(s []byte, seed uint128) uint128 {
+	slen := len(s)
+	if slen < 128 {
+		return CityMurmur(s, seed)
+	}
+
+	// We expect len >= 128 to be the common case.  Keep 56 bytes of state:
+	// v, w, x, y, and z.
+	var v1, v2 uint64
+	var w1, w2 uint64
+	x := seed.lo
+	y := seed.hi
+	z := uint64(slen) * k1
+	v1 = Rotate64(y^k1, 49)*k1 + Fetch64(s, 0)
+	v2 = Rotate64(v1, 42)*k1 + Fetch64(s, 8)
+	w1 = Rotate64(y+z, 35)*k1 + x
+	w2 = Rotate64(x+Fetch64(s, 88), 53) * k1
+
+	// This is the same inner loop as CityHash64(), manually unrolled.
+	for {
+		x = Rotate64(x+y+v1+Fetch64(s, 8), 37) * k1
+		y = Rotate64(y+v2+Fetch64(s, 48), 42) * k1
+		x ^= w2
+		y += v1 + Fetch64(s, 40)
+		z = Rotate64(z+w1, 33) * k1
+		v1, v2 = WeakHashLen32WithSeeds(s, v2*k1, x+w1)
+		w1, w2 = WeakHashLen32WithSeeds(s[32:], z+w2, y+Fetch64(s, 16))
+		z, x = x, z
+		s = s[64:]
+		x = Rotate64(x+y+v1+Fetch64(s, 8), 37) * k1
+		y = Rotate64(y+v2+Fetch64(s, 48), 42) * k1
+		x ^= w2
+		y += v1 + Fetch64(s, 40)
+		z = Rotate64(z+w1, 33) * k1
+		v1, v2 = WeakHashLen32WithSeeds(s, v2*k1, x+w1)
+		w1, w2 = WeakHashLen32WithSeeds(s[32:], z+w2, y+Fetch64(s, 16))
+		z, x = x, z
+		s = s[64:]
+		slen -= 128
+		if slen < 128 {
+			break
+		}
+	}
+	x += Rotate64(v1+z, 49) * k0
+	y = y*k0 + Rotate64(w2, 37)
+	z = z*k0 + Rotate64(w1, 27)
+	w1 *= 9
+	v1 *= k0
+	// If 0 < len < 128, hash up to 4 chunks of 32 bytes each from the end of s.
+	for tail_done := 0; tail_done < slen; {
+		tail_done += 32
+		y = Rotate64(x+y, 42)*k0 + v2
+		w1 += Fetch64(s, slen-tail_done+16)
+		x = x*k0 + w1
+		z += w2 + Fetch64(s, slen-tail_done)
+		w2 += v1
+		v1, v2 = WeakHashLen32WithSeeds(s[slen-tail_done:], v1+z, v2)
+		v1 *= k0
+	}
+	// At this point our 56 bytes of state should contain more than
+	// enough information for a strong 128-bit hash.  We use two
+	// different 56-byte-to-8-byte hashes to get a 16-byte final result.
+	x = HashLen16(x, v1)
+	y = HashLen16(y+z, w1)
+	return uint128{HashLen16(x+v2, w2) + y,
+		HashLen16(x+w2, y+v2)}
+}
+
+func CityHash128(s []byte) uint128 {
+	slen := len(s)
+	if slen >= 16 {
+		CityHash128WithSeed(s, uint128{Fetch64(s, 0), Fetch64(s, 8) + k0})
+	}
+	return CityHash128WithSeed(s, uint128{k0, k1})
+}
+
+func Fingerprint128(s []byte) uint128 {
+	return CityHash128(s)
+}
