@@ -52,7 +52,7 @@ type uint128 struct {
 
 // A subroutine for CityHash128().  Returns a decent 128-bit hash for strings
 // of any length representable in signed long.  Based on City and Murmur.
-func CityMurmur(s []byte, seed uint128) uint128 {
+func cityMurmur(s []byte, seed uint128) uint128 {
 	slen := uint32(len(s))
 	a := seed.lo
 	b := seed.hi
@@ -90,10 +90,10 @@ func CityMurmur(s []byte, seed uint128) uint128 {
 	return uint128{a ^ b, hashLen16(b, a)}
 }
 
-func CityHash128WithSeed(s []byte, seed uint128) uint128 {
+func cityHash128WithSeed(s []byte, seed uint128) uint128 {
 	slen := len(s)
 	if slen < 128 {
-		return CityMurmur(s, seed)
+		return cityMurmur(s, seed)
 	}
 
 	// We expect len >= 128 to be the common case.  Keep 56 bytes of state:
@@ -158,14 +158,14 @@ func CityHash128WithSeed(s []byte, seed uint128) uint128 {
 		hashLen16(x+w2, y+v2)}
 }
 
-func CityHash128(s []byte) uint128 {
+func cityHash128(s []byte) uint128 {
 	slen := len(s)
 	if slen >= 16 {
-		CityHash128WithSeed(s, uint128{fetch64(s, 0), fetch64(s, 8) + k0})
+		cityHash128WithSeed(s, uint128{fetch64(s, 0), fetch64(s, 8) + k0})
 	}
-	return CityHash128WithSeed(s, uint128{k0, k1})
+	return cityHash128WithSeed(s, uint128{k0, k1})
 }
 
 func Fingerprint128(s []byte) uint128 {
-	return CityHash128(s)
+	return cityHash128(s)
 }
