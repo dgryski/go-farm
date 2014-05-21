@@ -169,3 +169,19 @@ func cityHash128(s []byte) uint128 {
 func Fingerprint128(s []byte) uint128 {
 	return cityHash128(s)
 }
+
+func Fingerprint64(s []byte) uint64 {
+	return Hash64(s)
+}
+
+func Fingerprint32(s []byte) uint32 {
+	return Hash32(s)
+}
+
+func Hash128(s []byte) uint128 {
+	return Fingerprint128(s)
+}
+
+func Hash128WithSeed(s []byte, seed uint128) uint128 {
+	return cityHash128WithSeed(s, seed)
+}
