@@ -46,8 +46,8 @@ func hash128to64(x uint128) uint64 {
 }
 
 type uint128 struct {
-	hi uint64
 	lo uint64
+	hi uint64
 }
 
 // A subroutine for CityHash128().  Returns a decent 128-bit hash for strings
