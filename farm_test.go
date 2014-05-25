@@ -94,3 +94,21 @@ func TestHash64(t *testing.T) {
 
 	}
 }
+
+func TestFingerprint128(t *testing.T) {
+
+	var tests = []struct {
+		hi, lo uint64
+		in     string
+	}{
+		{9054869399155703984, 8033370924408288235, "abcdef"},
+		{352412539875473798, 3547689611939963773, "There is no reason for any individual to have a computer in their home. -Ken Olsen, 1977"},
+		{14320160249354795919, 10805939018293574989, "The fugacity of a constituent in a mixture of gases at a given temperature is proportional to its mole fraction.  Lewis-Randall RuleAAAAAAAAAAAAAAAA"},
+	}
+
+	for _, tt := range tests {
+		if h := Fingerprint128([]byte(tt.in)); h.hi != tt.hi || h.lo != tt.lo {
+			t.Errorf("Fingerprint128(%q)=(%#016x, %#016x) (len=%d) want (%#016x, %#016x)", tt.in, h.hi, h.lo, len(tt.in), tt.hi, tt.lo)
+		}
+	}
+}
