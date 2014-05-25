@@ -96,6 +96,10 @@ func cityHash128WithSeed(s []byte, seed uint128) uint128 {
 		return cityMurmur(s, seed)
 	}
 
+	endIdx := ((slen - 1) / 128) * 128
+	lastBlockIdx := endIdx + ((slen - 1) & 127) - 127
+	last := s[lastBlockIdx:]
+
 	// We expect len >= 128 to be the common case.  Keep 56 bytes of state:
 	// v, w, x, y, and z.
 	var v1, v2 uint64
@@ -142,13 +146,14 @@ func cityHash128WithSeed(s []byte, seed uint128) uint128 {
 	for tail_done := 0; tail_done < slen; {
 		tail_done += 32
 		y = rotate64(x+y, 42)*k0 + v2
-		w1 += fetch64(s, slen-tail_done+16)
+		w1 += fetch64(last, 128-tail_done+16)
 		x = x*k0 + w1
-		z += w2 + fetch64(s, slen-tail_done)
+		z += w2 + fetch64(last, 128-tail_done)
 		w2 += v1
-		v1, v2 = weakHashLen32WithSeeds(s[slen-tail_done:], v1+z, v2)
+		v1, v2 = weakHashLen32WithSeeds(last[128-tail_done:], v1+z, v2)
 		v1 *= k0
 	}
+
 	// At this point our 56 bytes of state should contain more than
 	// enough information for a strong 128-bit hash.  We use two
 	// different 56-byte-to-8-byte hashes to get a 16-byte final result.
