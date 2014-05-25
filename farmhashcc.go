@@ -161,7 +161,7 @@ func cityHash128WithSeed(s []byte, seed uint128) uint128 {
 func cityHash128(s []byte) uint128 {
 	slen := len(s)
 	if slen >= 16 {
-		cityHash128WithSeed(s, uint128{fetch64(s, 0), fetch64(s, 8) + k0})
+		return cityHash128WithSeed(s[16:], uint128{fetch64(s, 0), fetch64(s, 8) + k0})
 	}
 	return cityHash128WithSeed(s, uint128{k0, k1})
 }
