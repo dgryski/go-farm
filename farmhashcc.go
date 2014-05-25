@@ -53,7 +53,7 @@ type uint128 struct {
 // A subroutine for CityHash128().  Returns a decent 128-bit hash for strings
 // of any length representable in signed long.  Based on City and Murmur.
 func cityMurmur(s []byte, seed uint128) uint128 {
-	slen := uint32(len(s))
+	slen := len(s)
 	a := seed.lo
 	b := seed.hi
 	c := uint64(0)
