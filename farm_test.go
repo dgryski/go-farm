@@ -107,8 +107,8 @@ func TestFingerprint128(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		if h := Fingerprint128([]byte(tt.in)); h.hi != tt.hi || h.lo != tt.lo {
-			t.Errorf("Fingerprint128(%q)=(%#016x, %#016x) (len=%d) want (%#016x, %#016x)", tt.in, h.hi, h.lo, len(tt.in), tt.hi, tt.lo)
+		if lo, hi := Fingerprint128([]byte(tt.in)); hi != tt.hi || lo != tt.lo {
+			t.Errorf("Fingerprint128(%q)=(%#016x, %#016x) (len=%d) want (%#016x, %#016x)", tt.in, lo, hi, len(tt.in), tt.lo, tt.hi)
 		}
 	}
 }
