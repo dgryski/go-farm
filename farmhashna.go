@@ -96,7 +96,7 @@ func hashLen33to64(s []byte) uint64 {
 	return hashLen16Mul(rotate64(e+f, 43)+rotate64(g, 30)+h, e+rotate64(f+a, 18)+g, mul)
 }
 
-func Hash64(s []byte) uint64 {
+func naHash64(s []byte) uint64 {
 	slen := len(s)
 	const seed uint64 = 81
 	if slen <= 32 {
@@ -153,10 +153,10 @@ func Hash64(s []byte) uint64 {
 		mul)
 }
 
-func Hash64WithSeed(s []byte, seed uint64) uint64 {
-	return Hash64WithSeeds(s, k2, seed)
+func naHash64WithSeed(s []byte, seed uint64) uint64 {
+	return naHash64WithSeeds(s, k2, seed)
 }
 
-func Hash64WithSeeds(s []byte, seed0, seed1 uint64) uint64 {
-	return hashLen16(Hash64(s)-seed0, seed1)
+func naHash64WithSeeds(s []byte, seed0, seed1 uint64) uint64 {
+	return hashLen16(naHash64(s)-seed0, seed1)
 }
