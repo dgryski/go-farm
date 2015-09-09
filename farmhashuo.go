@@ -16,7 +16,7 @@ func Hash64WithSeeds(s []byte, seed0, seed1 uint64) uint64 {
 	// For strings over 64 bytes we loop.  Internal state consists of
 	// 64 bytes: u, v, w, x, y, and z.
 	x := seed0
-	y := seed1*k1 + 113
+	y := seed1*k2 + 113
 	z := shiftMix(y*k2) * k2
 	v := uint128{seed0, seed1}
 	var w uint128
