@@ -7,6 +7,7 @@ func uoH(x, y, mul uint64, r uint) uint64 {
 	return rotate64(b, r) * mul
 }
 
+// Hash64WithSeeds hashes a byte slice and two uint64 seeds and returns a uint64 hash value
 func Hash64WithSeeds(s []byte, seed0, seed1 uint64) uint64 {
 	slen := len(s)
 	if slen <= 64 {
@@ -99,6 +100,7 @@ func Hash64WithSeeds(s []byte, seed0, seed1 uint64) uint64 {
 		31)
 }
 
+// Hash64WithSeed hashes a byte slice and a uint64 seed and returns a uint64 hash value
 func Hash64WithSeed(s []byte, seed uint64) uint64 {
 	if len(s) <= 64 {
 		return naHash64WithSeed(s, seed)
@@ -106,6 +108,7 @@ func Hash64WithSeed(s []byte, seed uint64) uint64 {
 	return Hash64WithSeeds(s, 0, seed)
 }
 
+// Hash64 hashes a byte slice and returns a uint64 hash value
 func Hash64(s []byte) uint64 {
 	if len(s) <= 64 {
 		return naHash64(s)
