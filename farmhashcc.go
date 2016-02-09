@@ -143,14 +143,14 @@ func cityHash128WithSeed(s []byte, seed uint128) uint128 {
 	w1 *= 9
 	v1 *= k0
 	// If 0 < len < 128, hash up to 4 chunks of 32 bytes each from the end of s.
-	for tail_done := 0; tail_done < slen; {
-		tail_done += 32
+	for tailDone := 0; tailDone < slen; {
+		tailDone += 32
 		y = rotate64(x+y, 42)*k0 + v2
-		w1 += fetch64(last, 128-tail_done+16)
+		w1 += fetch64(last, 128-tailDone+16)
 		x = x*k0 + w1
-		z += w2 + fetch64(last, 128-tail_done)
+		z += w2 + fetch64(last, 128-tailDone)
 		w2 += v1
-		v1, v2 = weakHashLen32WithSeeds(last[128-tail_done:], v1+z, v2)
+		v1, v2 = weakHashLen32WithSeeds(last[128-tailDone:], v1+z, v2)
 		v1 *= k0
 	}
 
