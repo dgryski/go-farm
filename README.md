@@ -1,6 +1,6 @@
 # go-farm
 
-*Google's FarmHash hash functions implemented in Go language*
+*Google's FarmHash hash functions implemented in Go*
 
 [![Master Branch](https://img.shields.io/badge/-master:-gray.svg)](https://github.com/dgryski/go-farm/tree/master)
 [![Master Build Status](https://secure.travis-ci.org/dgryski/go-farm.png?branch=master)](https://travis-ci.org/dgryski/go-farm?branch=master)
