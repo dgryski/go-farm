@@ -102,9 +102,8 @@ func naHash64(s []byte) uint64 {
 	if slen <= 32 {
 		if slen <= 16 {
 			return hashLen0to16(s)
-		} else {
-			return hashLen17to32(s)
 		}
+		return hashLen17to32(s)
 	} else if slen <= 64 {
 		return hashLen33to64(s)
 	}
