@@ -1,6 +1,6 @@
 # go-farm
 
-*Google's FarmHash implemented in Go language*
+*Google's FarmHash hash functions implemented in Go language*
 
 [![Master Branch](https://img.shields.io/badge/-master:-gray.svg)](https://github.com/cognitivelogic/go-farm/tree/master)
 [![Master Build Status](https://secure.travis-ci.org/cognitivelogic/go-farm.png?branch=master)](https://travis-ci.org/cognitivelogic/go-farm?branch=master)
@@ -13,11 +13,17 @@
 
 ## Description
 
-This is a (mechanical) translation of the non-SSE4/non-AESNI hash functions from Google's FarmHash.
+FarmHash, a family of hash functions.
 
-For more information on FarmHash, please see https://github.com/google/farmhash
+This is a (mechanical) translation of the non-SSE4/non-AESNI hash functions from Google's FarmHash (https://github.com/google/farmhash).
 
-For a cgo library wrapping the C++ one, please see https://github.com/dgryski/go-farmhash
+
+FarmHash provides hash functions for strings and other data.
+The functions mix the input bits thoroughly but are not suitable for cryptography.
+
+All members of the FarmHash family were designed with heavy reliance on previous work by Jyrki Alakuijala, Austin Appleby, Bob Jenkins, and others.
+
+For more information please consult https://github.com/google/farmhash
 
 
 ## Getting started
