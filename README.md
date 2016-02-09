@@ -2,14 +2,9 @@
 
 *Google's FarmHash hash functions implemented in Go language*
 
-[![Master Branch](https://img.shields.io/badge/-master:-gray.svg)](https://github.com/cognitivelogic/go-farm/tree/master)
-[![Master Build Status](https://secure.travis-ci.org/cognitivelogic/go-farm.png?branch=master)](https://travis-ci.org/cognitivelogic/go-farm?branch=master)
-[![Master Coverage Status](https://coveralls.io/repos/cognitivelogic/go-farm/badge.svg?branch=master&service=github)](https://coveralls.io/github/cognitivelogic/go-farm?branch=master)
-*
-[![Develop Branch](https://img.shields.io/badge/-develop:-gray.svg)](https://github.com/cognitivelogic/go-farm/tree/develop)
-[![Develop Build Status](https://secure.travis-ci.org/cognitivelogic/go-farm.png?branch=develop)](https://travis-ci.org/cognitivelogic/go-farm?branch=develop)
-[![Develop Coverage Status](https://coveralls.io/repos/cognitivelogic/go-farm/badge.svg?branch=develop&service=github)](https://coveralls.io/github/cognitivelogic/go-farm?branch=develop)
-
+[![Master Branch](https://img.shields.io/badge/-master:-gray.svg)](https://github.com/dgryski/go-farm/tree/master)
+[![Master Build Status](https://secure.travis-ci.org/dgryski/go-farm.png?branch=master)](https://travis-ci.org/dgryski/go-farm?branch=master)
+[![Master Coverage Status](https://coveralls.io/repos/dgryski/go-farm/badge.svg?branch=master&service=github)](https://coveralls.io/github/dgryski/go-farm?branch=master)
 
 ## Description
 
