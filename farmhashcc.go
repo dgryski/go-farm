@@ -36,12 +36,12 @@ func hash32Len0to4(s []byte, seed uint32) uint32 {
 
 func hash128to64(x uint128) uint64 {
 	// Murmur-inspired hashing.
-	const kMul uint64 = 0x9ddfea08eb382d69
-	a := (x.lo ^ x.hi) * kMul
+	const mul uint64 = 0x9ddfea08eb382d69
+	a := (x.lo ^ x.hi) * mul
 	a ^= (a >> 47)
-	b := (x.hi ^ a) * kMul
+	b := (x.hi ^ a) * mul
 	b ^= (b >> 47)
-	b *= kMul
+	b *= mul
 	return b
 }
 
