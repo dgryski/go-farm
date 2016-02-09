@@ -12,6 +12,7 @@ func hash32Len5to12(s []byte, seed uint32) uint32 {
 	return fmix(seed ^ mur(c, mur(b, mur(a, d))))
 }
 
+// Hash32 hashes a byte slice and returns a uint32 hash value
 func Hash32(s []byte) uint32 {
 
 	slen := len(s)
@@ -83,6 +84,7 @@ func Hash32(s []byte) uint32 {
 	return h
 }
 
+// Hash32WithSeed hashes a byte slice and a uint32 seed and returns a uint32 hash value
 func Hash32WithSeed(s []byte, seed uint32) uint32 {
 	slen := len(s)
 

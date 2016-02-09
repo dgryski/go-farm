@@ -171,23 +171,28 @@ func cityHash128(s []byte) uint128 {
 	return cityHash128WithSeed(s, uint128{k0, k1})
 }
 
+// Fingerprint128 is a 128-bit fingerprint function for byte-slices
 func Fingerprint128(s []byte) (lo, hi uint64) {
 	h := cityHash128(s)
 	return h.lo, h.hi
 }
 
+// Fingerprint64 is a 64-bit fingerprint function for byte-slices
 func Fingerprint64(s []byte) uint64 {
 	return Hash64(s)
 }
 
+// Fingerprint32 is a 32-bit fingerprint function for byte-slices
 func Fingerprint32(s []byte) uint32 {
 	return Hash32(s)
 }
 
+// Hash128 is a 128-bit hash function for byte-slices
 func Hash128(s []byte) (lo, hi uint64) {
 	return Fingerprint128(s)
 }
 
+// Hash128WithSeed is a 128-bit hash function for byte-slices and a 128-bit seed
 func Hash128WithSeed(s []byte, seed0, seed1 uint64) (lo, hi uint64) {
 	h := cityHash128WithSeed(s, uint128{seed0, seed1})
 	return h.lo, h.hi
