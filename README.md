@@ -23,7 +23,7 @@ For more information please consult https://github.com/google/farmhash
 
 ## Getting started
 
-This application is written in GO language, please refere to the guides in https://golang.org for getting started.
+This application is written in the go language, please refer to the guides in https://golang.org for getting started.
 
 This project include a Makefile that allows you to test and build the project with simple commands.
 To see all available options:
