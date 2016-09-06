@@ -27,8 +27,8 @@ func hash32Len0to4(s []byte, seed uint32) uint32 {
 	b := seed
 	c := uint32(9)
 	for i := 0; i < slen; i++ {
-		v := int8(s[i])
-		b = uint32(b*c1) + uint32(v)
+		v := uint32(s[i])
+		b = (b * c1) + v
 		c ^= b
 	}
 	return fmix(mur(b, mur(uint32(slen), c)))
@@ -68,8 +68,8 @@ func cityMurmur(s []byte, seed uint128) uint128 {
 			d = shiftMix(a + c)
 		}
 	} else { // len > 16
-		c = hashLen16(fetch64(s, int(slen-8))+k1, a)
-		d = hashLen16(b+uint64(slen), c+fetch64(s, int(slen-16)))
+		c = hashLen16(fetch64(s, slen-8)+k1, a)
+		d = hashLen16(b+uint64(slen), c+fetch64(s, slen-16))
 		a += d
 		for {
 			a ^= shiftMix(fetch64(s, 0)*k1) * k1

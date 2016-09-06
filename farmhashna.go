@@ -32,7 +32,7 @@ func hashLen0to16(s []byte) uint64 {
 	if slen >= 4 {
 		mul := k2 + slen*2
 		a := fetch32(s, 0)
-		return hashLen16Mul(uint64(slen)+(uint64(a)<<3), uint64(fetch32(s, int(slen-4))), mul)
+		return hashLen16Mul(slen+(uint64(a)<<3), uint64(fetch32(s, int(slen-4))), mul)
 	}
 	if slen > 0 {
 		a := s[0]
