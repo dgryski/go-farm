@@ -56,8 +56,8 @@ func cityMurmur(s []byte, seed uint128) uint128 {
 	slen := len(s)
 	a := seed.lo
 	b := seed.hi
-	c := uint64(0)
-	d := uint64(0)
+	var c uint64
+	var d uint64
 	l := slen - 16
 	if l <= 0 { // len <= 16
 		a = shiftMix(a*k1) * k1
