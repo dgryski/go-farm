@@ -10,7 +10,6 @@
 # ------------------------------------------------------------------------------
 
 # List special make targets that are not associated with files
-.PHONY: help all qa test format fmtcheck vet lint coverage docs deps clean nuke
 .PHONY: help all test format fmtcheck vet lint coverage cyclo ineffassign misspell astscan qa deps clean nuke
 
 # Use bash as shell (Note: Ubuntu now uses dash which doesn't support PIPESTATUS).
@@ -39,8 +38,8 @@ help:
 	@echo "$(PROJECT) Makefile."
 	@echo "The following commands are available:"
 	@echo ""
-	@echo "    make qa         : Run all the tests"
-	@echo "    make test       : Run the unit tests"
+	@echo "    make qa          : Run all Quality-Assurance checks"
+	@echo "    make test        : Run unit tests"
 	@echo ""
 	@echo "    make format      : Format the source code"
 	@echo "    make fmtcheck    : Check if the source code has been formatted"
@@ -52,11 +51,11 @@ help:
 	@echo "    make misspell    : Detect commonly misspelled words in source files"
 	@echo "    make astscan     : GO AST scanner"
 	@echo ""
-	@echo "    make docs       : Generate source code documentation"
+	@echo "    make docs        : Generate source code documentation"
 	@echo ""
-	@echo "    make deps       : Get the dependencies"
-	@echo "    make clean      : Remove any build artifact"
-	@echo "    make nuke       : Deletes any intermediate file"
+	@echo "    make deps        : Get the dependencies"
+	@echo "    make clean       : Remove any build artifact"
+	@echo "    make nuke        : Deletes any intermediate file"
 	@echo ""
 
 # Alias for help target
