@@ -6,6 +6,7 @@
 [![Master Build Status](https://secure.travis-ci.org/dgryski/go-farm.png?branch=master)](https://travis-ci.org/dgryski/go-farm?branch=master)
 [![Master Coverage Status](https://coveralls.io/repos/dgryski/go-farm/badge.svg?branch=master&service=github)](https://coveralls.io/github/dgryski/go-farm?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dgryski/go-farm)](https://goreportcard.com/report/github.com/dgryski/go-farm)
+[![GoDoc](https://godoc.org/github.com/dgryski/go-farm?status.svg)](http://godoc.org/github.com/dgryski/go-farm)
 
 ## Description
 
