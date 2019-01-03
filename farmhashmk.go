@@ -55,8 +55,7 @@ func Hash32(s []byte) uint32 {
 	g = g*5 + 0xe6546b64
 	f += a4
 	f = bits.RotateLeft32(f, -19) + 113
-	iters := (slen - 1) / 20
-	for {
+	for len(s) > 20 {
 		a := binary.LittleEndian.Uint32(s[0 : 0+4])
 		b := binary.LittleEndian.Uint32(s[4 : 4+4])
 		c := binary.LittleEndian.Uint32(s[8 : 8+4])
@@ -71,10 +70,6 @@ func Hash32(s []byte) uint32 {
 		f += g
 		g += f
 		s = s[20:]
-		iters--
-		if iters == 0 {
-			break
-		}
 	}
 	g = bits.RotateLeft32(g, -11) * c1
 	g = bits.RotateLeft32(g, -17) * c1
