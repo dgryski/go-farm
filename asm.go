@@ -407,7 +407,7 @@ func loopBody(x, y, z, vlo, vhi, wlo, whi, sbase GPVirtual, mul1 GPVirtual, mul2
 
 func main() {
 
-	ConstraintExpr("!purego")
+	ConstraintExpr("amd64,!purego")
 
 	TEXT("Fingerprint64", NOSPLIT, "func(s []byte) uint64")
 
