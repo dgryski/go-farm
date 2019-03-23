@@ -406,6 +406,9 @@ func loopBody(x, y, z, vlo, vhi, wlo, whi, sbase GPVirtual, mul1 GPVirtual, mul2
 }
 
 func main() {
+
+	ConstraintExpr("!purego")
+
 	TEXT("Fingerprint64", NOSPLIT, "func(s []byte) uint64")
 
 	slen := GP64()
