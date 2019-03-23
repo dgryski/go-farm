@@ -10,9 +10,9 @@ var res64 uint64
 var res64lo, res64hi uint64
 
 // 256-bytes random string
-var buf = []byte("RMVx)@MLxH9M.WeGW-ktWwR3Cy1XS.,K~i@n-Y+!!yx4?AB%cM~l/#0=2:BOn7HPipG&o/6Qe<hU;$w1-~bU4Q7N&yk/8*Zz.Yg?zl9bVH/pXs6Bq^VdW#Z)NH!GcnH-UesRd@gDij?luVQ3;YHaQ<~SBm17G9;RWvGlsV7tpe*RCe=,?$nE1u9zvjd+rBMu7_Rg4)2AeWs^aaBr&FkC#rcwQ.L->I+Da7Qt~!C^cB2wq(^FGyB?kGQpd(G8I.A7")
+var buf = make([]byte, 8192)
 
-var sizes = []int{8, 16, 32, 40, 60, 64, 72, 80, 100, 150, 200, 250}
+var sizes = []int{8, 16, 32, 40, 60, 64, 72, 80, 100, 150, 200, 250, 512, 1024, 8192}
 
 func BenchmarkHash32(b *testing.B) {
 	var r uint32
@@ -42,6 +42,20 @@ func BenchmarkHash64(b *testing.B) {
 		})
 	}
 
+}
+
+func BenchmarkFingerprint64(b *testing.B) {
+	var r uint64
+
+	for _, n := range sizes {
+		b.Run(strconv.Itoa(n), func(b *testing.B) {
+			b.SetBytes(int64(n))
+			for i := 0; i < b.N; i++ {
+				r = Fingerprint64(buf[:n])
+			}
+			res64 = r
+		})
+	}
 }
 
 func BenchmarkHash128(b *testing.B) {
