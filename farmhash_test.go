@@ -154,7 +154,7 @@ func TestHash32(t *testing.T) {
 func TestFingerprint32(t *testing.T) {
 	for _, tt := range testData {
 		if h := Fingerprint32([]byte(tt.in)); h != tt.oh32 {
-			t.Errorf("Hash32(%q)=%#08x (len=%d), want %#08x", tt.in, h, len(tt.in), tt.oh32)
+			t.Errorf("Fingerprint32(%q)=%#08x (len=%d), want %#08x", tt.in, h, len(tt.in), tt.oh32)
 		}
 	}
 }
