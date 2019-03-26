@@ -154,7 +154,16 @@ func TestHash32(t *testing.T) {
 func TestFingerprint32(t *testing.T) {
 	for _, tt := range testData {
 		if h := Fingerprint32([]byte(tt.in)); h != tt.oh32 {
-			t.Errorf("Hash32(%q)=%#08x (len=%d), want %#08x", tt.in, h, len(tt.in), tt.oh32)
+			t.Errorf("Fingerprint32(%q)=%#08x (len=%d), want %#08x", tt.in, h, len(tt.in), tt.oh32)
+		}
+	}
+}
+
+func TestFP32(t *testing.T) {
+	for _, tt := range testData {
+		g := Hash32([]byte(tt.in))
+		if h := FP32([]byte(tt.in)); h != g {
+			t.Errorf("FP32(%q)=%#08x (len=%d), want %#08x", tt.in, h, len(tt.in), g)
 		}
 	}
 }
