@@ -664,10 +664,10 @@ long:
 	ADDL  SI, BP
 	RORL  $0x13, BP
 	ADDL  $0x71, BP
-	CMPQ  CX, $0x50
-	JL    loop
 
 loop80:
+	CMPQ   CX, $0x64
+	JL     loop20
 	MOVL   (AX), SI
 	ADDL   SI, DX
 	MOVL   4(AX), DI
@@ -822,12 +822,11 @@ loop80:
 	ADDL   BP, BX
 	ADDQ   $0x50, AX
 	SUBQ   $0x50, CX
-	CMPQ   CX, $0x50
-	JG     loop80
-	CMPQ   CX, $0x14
-	JL     after
+	JMP    loop80
 
-loop:
+loop20:
+	CMPQ   CX, $0x14
+	JLE    after
 	MOVL   (AX), SI
 	ADDL   SI, DX
 	MOVL   4(AX), DI
@@ -868,8 +867,7 @@ loop:
 	ADDL   BP, BX
 	ADDQ   $0x14, AX
 	SUBQ   $0x14, CX
-	CMPQ   CX, $0x14
-	JG     loop
+	JMP    loop20
 
 after:
 	MOVL  $0xcc9e2d51, AX

@@ -805,10 +805,9 @@ func fp32() {
 		ADDL(f, g)
 	}
 
-	CMPQ(slen, Imm(80))
-	JL(LabelRef("loop"))
-
 	Label("loop80")
+	CMPQ(slen, Imm(80+20))
+	JL(LabelRef("loop20"))
 	{
 		loop32Body(f, g, h, sbase, slen, 0)
 		loop32Body(f, g, h, sbase, slen, 20)
@@ -817,21 +816,18 @@ func fp32() {
 
 		ADDQ(Imm(80), sbase)
 		SUBQ(Imm(80), slen)
-		CMPQ(slen, Imm(80))
-		JG(LabelRef("loop80"))
+		JMP(LabelRef("loop80"))
 	}
 
+	Label("loop20")
 	CMPQ(slen, Imm(20))
-	JL(LabelRef("after"))
-
-	Label("loop")
+	JLE(LabelRef("after"))
 	{
 		loop32Body(f, g, h, sbase, slen, 0)
 
 		ADDQ(Imm(20), sbase)
 		SUBQ(Imm(20), slen)
-		CMPQ(slen, Imm(20))
-		JG(LabelRef("loop"))
+		JMP(LabelRef("loop20"))
 	}
 
 	Label("after")
