@@ -691,7 +691,7 @@ func hash32Len0to4(sbase, slen GPVirtual) {
 
 func fp32() {
 
-	TEXT("FP32", NOSPLIT, "func(s []byte) uint32")
+	TEXT("Fingerprint32", NOSPLIT, "func(s []byte) uint32")
 
 	sbase := GP64()
 	slen := GP64()

@@ -31,7 +31,7 @@ func BenchmarkHash32(b *testing.B) {
 
 }
 
-func BenchmarkFP32(b *testing.B) {
+func BenchmarkFingerprint32(b *testing.B) {
 	var r uint32
 
 	for _, n := range sizes {
@@ -39,7 +39,7 @@ func BenchmarkFP32(b *testing.B) {
 			b.SetBytes(int64(n))
 			for i := 0; i < b.N; i++ {
 				// record the result to prevent the compiler eliminating the function call
-				r = FP32(buf[:n])
+				r = Fingerprint32(buf[:n])
 			}
 			// store the result to a package level variable so the compiler cannot eliminate the Benchmark itself
 			res32 = r
