@@ -100,7 +100,6 @@ func hashLen0to16(sbase, slen GPVirtual) {
 		r := hashLen16Mul(c, d, mul)
 		Store(r, ReturnIndex(0))
 		RET()
-		JMP(LabelRef("fp64ret"))
 	}
 
 	Label("check4")
@@ -130,7 +129,6 @@ func hashLen0to16(sbase, slen GPVirtual) {
 
 		Store(r, ReturnIndex(0))
 		RET()
-		JMP(LabelRef("fp64ret"))
 	}
 
 	Label("check0")
@@ -178,7 +176,6 @@ func hashLen0to16(sbase, slen GPVirtual) {
 
 		Store(r, ReturnIndex(0))
 		RET()
-		JMP(LabelRef("fp64ret"))
 	}
 
 	Label("empty")
@@ -187,7 +184,6 @@ func hashLen0to16(sbase, slen GPVirtual) {
 	MOVQ(Imm(k2), ret)
 	Store(ret, ReturnIndex(0))
 	RET()
-	JMP(LabelRef("fp64ret"))
 }
 
 func hashLen17to32(sbase, slen GPVirtual) {
@@ -225,7 +221,6 @@ func hashLen17to32(sbase, slen GPVirtual) {
 	r := hashLen16MulLine(a, b, c, d, rk2, mul)
 	Store(r, ReturnIndex(0))
 	RET()
-	JMP(LabelRef("fp64ret"))
 }
 
 // Return an 8-byte hash for 33 to 64 bytes.
@@ -302,7 +297,6 @@ func hashLen33to64(sbase, slen GPVirtual) {
 	r := hashLen16MulLine(e, f, g, h, a, mul)
 	Store(r, ReturnIndex(0))
 	RET()
-	JMP(LabelRef("fp64ret"))
 }
 
 // Return a 16-byte hash for s[0] ... s[31], a, and b.  Quick and dirty.
@@ -513,7 +507,6 @@ func fp64() {
 		Store(r, ReturnIndex(0))
 	}
 
-	Label("fp64ret")
 	RET()
 }
 
@@ -708,15 +701,12 @@ func fp32() {
 	CMPQ(slen, Imm(4))
 	JG(LabelRef("hash_5_12"))
 	hash32Len0to4(sbase, slen)
-	JMP(LabelRef("fp32ret"))
 
 	Label("hash_5_12")
 	hash32Len5to12(sbase, slen)
-	JMP(LabelRef("fp32ret"))
 
 	Label("hash_13_24")
 	hash32Len13to24Seed(sbase, slen)
-	JMP(LabelRef("fp32ret"))
 
 	Label("long")
 
@@ -872,8 +862,6 @@ func fp32() {
 	IMULL(c1reg, h)
 
 	Store(h, ReturnIndex(0))
-	RET()
-	Label("fp32ret")
 	RET()
 }
 
