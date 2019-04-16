@@ -306,7 +306,7 @@ func hashLen33to64(sbase, slen GPVirtual) {
 }
 
 // Return a 16-byte hash for s[0] ... s[31], a, and b.  Quick and dirty.
-func weakHashLen32WithSeeds(sbase GPVirtual, disp int, a, b GPVirtual) (GPVirtual, GPVirtual) {
+func weakHashLen32WithSeeds(sbase GPVirtual, disp int, a, b GPVirtual) {
 
 	w := Mem{Base: sbase, Disp: disp + 0}
 	x := Mem{Base: sbase, Disp: disp + 8}
@@ -341,13 +341,7 @@ func weakHashLen32WithSeeds(sbase GPVirtual, disp int, a, b GPVirtual) (GPVirtua
 	ADDQ(z, a)
 	ADDQ(c, b)
 
-	r1, r2 := GP64(), GP64()
-	MOVQ(a, r1)
-	MOVQ(b, r2)
-	return r1, r2
-
-	return a, b
-
+	XCHGQ(a, b)
 }
 
 func hashLoopBody(x, y, z, vlo, vhi, wlo, whi, sbase GPVirtual, mul1 GPVirtual, mul2 uint64) {
@@ -391,18 +385,14 @@ func hashLoopBody(x, y, z, vlo, vhi, wlo, whi, sbase GPVirtual, mul1 GPVirtual, 
 		IMULQ(mul1, vhi)
 		MOVQ(x, vlo)
 		ADDQ(wlo, vlo)
-		a, b := weakHashLen32WithSeeds(sbase, 0, vhi, vlo)
-		MOVQ(a, vlo)
-		MOVQ(b, vhi)
+		weakHashLen32WithSeeds(sbase, 0, vhi, vlo)
 	}
 
 	{
 		ADDQ(z, whi)
 		MOVQ(y, wlo)
 		ADDQ(Mem{Base: sbase, Disp: 16}, wlo)
-		a, b := weakHashLen32WithSeeds(sbase, 32, whi, wlo)
-		MOVQ(a, wlo)
-		MOVQ(b, whi)
+		weakHashLen32WithSeeds(sbase, 32, whi, wlo)
 	}
 
 	XCHGQ(z, x)
