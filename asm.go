@@ -751,6 +751,7 @@ func fp32() {
 	shuf(h, -16)
 	shuf(g, -12)
 
+	PREFETCHT0(Mem{Base: sbase})
 	{
 		a := GP32()
 		MOVL(Mem{Base: send, Disp: -20}, a)
@@ -801,9 +802,13 @@ func fp32() {
 	CMPQ(slen, Imm(80+20))
 	JL(LabelRef("loop20"))
 	{
+		PREFETCHT0(Mem{Base: sbase, Disp: 20})
 		loop32Body(f, g, h, sbase, slen, 0)
+		PREFETCHT0(Mem{Base: sbase, Disp: 40})
 		loop32Body(f, g, h, sbase, slen, 20)
+		PREFETCHT0(Mem{Base: sbase, Disp: 60})
 		loop32Body(f, g, h, sbase, slen, 40)
+		PREFETCHT0(Mem{Base: sbase, Disp: 80})
 		loop32Body(f, g, h, sbase, slen, 60)
 
 		ADDQ(Imm(80), sbase)
