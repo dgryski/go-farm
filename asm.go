@@ -3,6 +3,8 @@
 package main
 
 import (
+	"flag"
+
 	. "github.com/mmcloughlin/avo/build"
 	. "github.com/mmcloughlin/avo/operand"
 	. "github.com/mmcloughlin/avo/reg"
@@ -533,9 +535,9 @@ func fmix(h GPVirtual) GPVirtual {
 }
 
 func mur(a, h GPVirtual) GPVirtual {
-	IMUL3L(U32(c1), a, a)
+	imul3l(c1, a, a)
 	RORL(Imm(17), a)
-	IMUL3L(U32(c2), a, a)
+	imul3l(c2, a, a)
 	XORL(a, h)
 	RORL(Imm(19), h)
 
@@ -786,7 +788,7 @@ func fp32() {
 		g = mur(t, g)
 		ADDL(a, g)
 
-		IMUL3L(U32(c1), e, t)
+		imul3l(c1, e, t)
 		ADDL(b, t)
 		f = mur(t, f)
 		ADDL(d, f)
@@ -865,7 +867,22 @@ func fp32() {
 	RET()
 }
 
+var go111 = flag.Bool("go111", true, "use assembly instructions present in go1.11 and later")
+
+func imul3l(m uint32, x, y Register) {
+	if *go111 {
+		IMUL3L(U32(m), x, y)
+	} else {
+		t := GP32()
+		MOVL(U32(m), t)
+		IMULL(t, x)
+		MOVL(x, y)
+	}
+}
+
 func main() {
+
+	flag.Parse()
 
 	ConstraintExpr("amd64,!purego")
 
