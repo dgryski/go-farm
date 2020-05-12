@@ -3,6 +3,9 @@ package farm
 import (
 	"strconv"
 	"testing"
+
+	// Farmhash from go bindings.
+	"github.com/dgryski/go-farmhash"
 )
 
 var res32 uint32
@@ -28,7 +31,22 @@ func BenchmarkHash32(b *testing.B) {
 			res32 = r
 		})
 	}
+}
 
+func BenchmarkCGoFarmhash32(b *testing.B) {
+	var r uint32
+
+	for _, n := range sizes {
+		b.Run(strconv.Itoa(n), func(b *testing.B) {
+			b.SetBytes(int64(n))
+			for i := 0; i < b.N; i++ {
+				// record the result to prevent the compiler eliminating the function call
+				r = farmhash.Hash32(buf[:n])
+			}
+			// store the result to a package level variable so the compiler cannot eliminate the Benchmark itself
+			res32 = r
+		})
+	}
 }
 
 func BenchmarkFingerprint32(b *testing.B) {
@@ -60,6 +78,19 @@ func BenchmarkHash64(b *testing.B) {
 		})
 	}
 
+}
+
+func BenchmarkCGoFarmhash64(b *testing.B) {
+	var r uint64
+
+	for _, n := range sizes {
+		b.Run(strconv.Itoa(n), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				r = farmhash.Hash64(buf[:n])
+			}
+			res64 = r
+		})
+	}
 }
 
 func BenchmarkFingerprint64(b *testing.B) {
